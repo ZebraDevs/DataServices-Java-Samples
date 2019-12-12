@@ -20,6 +20,7 @@ public class APIContent {
         this.context = context;
 
         // Add some API items.
+        ITEMS.clear();
         addItem(new ApiItem("1", context.getString(R.string.create_barcode), context.getString(R.string.create_barcode_details)));
         addItem(new ApiItem("2", context.getString(R.string.fda_recall), context.getString(R.string.fda_recall_details)));
         addItem(new ApiItem("3", context.getString(R.string.upc_lookup), context.getString(R.string.upc_lookup_details)));
