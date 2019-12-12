@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Barcode Intelligence Tools</string>
     <string name="fda_recall">FDA Recall</string>
+    <string name="fda_recall_details">Returns FDA recall notices for given criteria</string>
     <string name="create_barcode">Create Barcode</string>
+    <string name="create_barcode_details">Generates a barcode from the text provided and returns a PNG image</string>
     <string name="upc_lookup">UPC Lookup</string>
+    <string name="upc_lookup_details">Retrieves product information in JSON format for a provided UPC code</string>
+    <string name="title_item_detail">Savanna Barcode Tools</string>
 </resources>
