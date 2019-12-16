@@ -7,4 +7,14 @@
     <string name="upc_lookup">UPC Lookup</string>
     <string name="upc_lookup_details">Retrieves product information in JSON format for a provided UPC code</string>
     <string name="title_item_detail">Savanna Barcode Tools</string>
+    <string name="create_hint">Enter barcode text...</string>
+    <string name="activity_intent_filter_action">com.zebra.SCAN</string>
+    <string name="datawedge_intent_key_source">com.symbol.datawedge.source</string>
+    <string name="datawedge_intent_key_label_type">com.symbol.datawedge.label_type</string>
+    <string name="datawedge_intent_key_data">com.symbol.datawedge.data_string</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="service_settings">Service Settings</string>
+    <string name="apikey_title">Your API Key</string>
 </resources>
