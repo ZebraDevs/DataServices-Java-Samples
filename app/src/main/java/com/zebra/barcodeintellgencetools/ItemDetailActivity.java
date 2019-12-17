@@ -4,11 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.ActionBar;
+
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
+
+import com.zebra.savanna.BaseAPI;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -59,8 +65,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(myBroadcastReceiver);
     }
@@ -90,6 +95,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                     displayScanResult(intent);
                 } catch (Exception e) {
                     //  Catch if the UI does not exist when we receive the broadcast
+                    e.printStackTrace();
                 }
             }
         }
@@ -99,12 +105,14 @@ public class ItemDetailActivity extends AppCompatActivity {
     // The section below assumes that a UI exists in which to place the data. A production
     // application would be driving much of the behavior following a scan.
     //
-    private void displayScanResult(Intent initiatingIntent)
-    {
-        String decodedSource = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_source));
+    private void displayScanResult(Intent initiatingIntent) {
         String decodedData = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_data));
-        String decodedLabelType = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_label_type));
+        String decodedLabelType = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_label_type)).toLowerCase();
 
+        System.out.println("decodedData: " + decodedData);
+        System.out.println("decodedLabelType: " + decodedLabelType);
+
+        ItemDetailFragment.routeScanData(decodedData, decodedLabelType);
     }
 
     @Override

@@ -13,8 +13,11 @@
     <string name="datawedge_intent_key_label_type">com.symbol.datawedge.label_type</string>
     <string name="datawedge_intent_key_data">com.symbol.datawedge.data_string</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="scan">Scan a barcode...</string>
 
     <!-- Preference Titles -->
     <string name="service_settings">Service Settings</string>
     <string name="apikey_title">Your API Key</string>
+    <string name="fdaSearch">Search FDA</string>
+    <string name="fdaSearchHint">Enter search term...</string>
 </resources>
