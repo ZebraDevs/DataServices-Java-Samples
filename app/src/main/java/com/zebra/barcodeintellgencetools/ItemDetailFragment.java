@@ -169,7 +169,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
             case "2":
                 results.setText("");
                 EditText searchText = root.findViewById(R.id.fdaSearchTerm);
-                new RetrieveAPITask().execute("foodSearch", searchText.getText().toString());
+                new RetrieveAPITask().execute("deviceSearch", searchText.getText().toString());
                 new RetrieveAPITask().execute("drugSearch", searchText.getText().toString());
         }
     }
