@@ -1,8 +1,10 @@
-package com.zebra.barcodeintellgencetools;
+package com.zebra.barcodeintellgencetools.api;
 
 
 import android.os.AsyncTask;
 
+import com.zebra.barcodeintellgencetools.ItemDetailFragment;
+import com.zebra.barcodeintellgencetools.ItemListActivity;
 import com.zebra.savanna.CreateBarcode;
 import com.zebra.savanna.FDARecall;
 import com.zebra.savanna.Rotation;
@@ -12,7 +14,7 @@ import com.zebra.savanna.UPCLookup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class RetrieveAPITask extends AsyncTask<String, Void, Object> {
+public class RetrieveAPITask extends AsyncTask<String, Void, Object> {
     private Exception exception;
 
     protected Object doInBackground(String... args) {

@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.zebra.barcodeintellgencetools.api.APIContent;
+import com.zebra.barcodeintellgencetools.api.RetrieveAPITask;
 import com.zebra.savanna.BaseAPI;
 import com.zebra.savanna.Symbology;
 
@@ -53,7 +54,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
     public ItemDetailFragment() {
     }
 
-    static void onPostExecute(Object apiData) {
+    public static void onPostExecute(Object apiData) {
         if (apiData instanceof byte[]) {
             ImageView barcode = root.findViewById(R.id.barcode);
             byte[] data = (byte[]) apiData;
