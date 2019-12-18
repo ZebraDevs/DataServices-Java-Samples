@@ -107,7 +107,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         System.out.println("decodedData: " + decodedData);
         System.out.println("decodedLabelType: " + decodedLabelType);
 
-        ItemDetailFragment.routeScanData(decodedData, decodedLabelType);
+        ItemDetailFragment.Instance.routeScanData(decodedData, decodedLabelType);
     }
 
     @Override

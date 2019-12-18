@@ -42,13 +42,13 @@ public class RetrieveAPITask extends AsyncTask<String, Void, Object> {
     protected void onPostExecute(Object apiData) {
         if (exception != null) {
             try {
-                ItemDetailFragment.onPostExecute(new JSONObject(exception.getMessage()));
+                ItemDetailFragment.Instance.onPostExecute(new JSONObject(exception.getMessage()));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         } else {
-            ItemDetailFragment.onPostExecute(apiData);
+            ItemDetailFragment.Instance.onPostExecute(apiData);
         }
     }
 }
