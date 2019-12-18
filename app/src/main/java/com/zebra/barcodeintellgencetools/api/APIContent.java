@@ -2,6 +2,8 @@ package com.zebra.barcodeintellgencetools.api;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.zebra.barcodeintellgencetools.R;
 
 import java.util.ArrayList;
@@ -15,9 +17,16 @@ import java.util.Map;
  * <p>
  */
 public class APIContent {
-    Context context;
-    public APIContent(Context context){
-        this.context = context;
+    /**
+     * An array of API items.
+     */
+    public static final List<ApiItem> ITEMS = new ArrayList<>();
+    /**
+     * A map of API items, by ID.
+     */
+    public static final Map<String, ApiItem> ITEM_MAP = new HashMap<>();
+
+    public APIContent(Context context) {
 
         // Add some API items.
         ITEMS.clear();
@@ -25,16 +34,6 @@ public class APIContent {
         addItem(new ApiItem("2", context.getString(R.string.fda_recall), context.getString(R.string.fda_recall_details)));
         addItem(new ApiItem("3", context.getString(R.string.upc_lookup), context.getString(R.string.upc_lookup_details)));
     }
-
-    /**
-     * An array of API items.
-     */
-    public static final List<ApiItem> ITEMS = new ArrayList<ApiItem>();
-
-    /**
-     * A map of API items, by ID.
-     */
-    public static final Map<String, ApiItem> ITEM_MAP = new HashMap<String, ApiItem>();
 
     private static void addItem(ApiItem item) {
         ITEMS.add(item);
@@ -44,17 +43,18 @@ public class APIContent {
     /**
      * An item representing a piece of API content.
      */
-    public static class ApiItem {
+    public class ApiItem {
         public final String id;
         public final String content;
         public final String details;
 
-        public ApiItem(String id, String content, String details) {
+        ApiItem(@NonNull String id, @NonNull String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return content;

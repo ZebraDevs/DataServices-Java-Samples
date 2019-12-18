@@ -4,17 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.ActionBar;
-
-import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
-import com.zebra.savanna.BaseAPI;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -23,6 +18,37 @@ import com.zebra.savanna.BaseAPI;
  * in a {@link ItemListActivity}.
  */
 public class ItemDetailActivity extends AppCompatActivity {
+
+    //
+    // After registering the broadcast receiver, the next step (below) is to define it.
+    // Here it's done in the MainActivity.java, but also can be handled by a separate class.
+    // The logic of extracting the scanned data and displaying it on the screen
+    // is executed in its own method (later in the code). Note the use of the
+    // extra keys defined in the strings.xml file.
+    //
+    private BroadcastReceiver myBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            //Bundle b = intent.getExtras();
+
+            //  This is useful for debugging to verify the format of received intents from DataWedge
+            //for (String key : b.keySet())
+            //{
+            //    Log.v(LOG_TAG, key);
+            //}
+
+            if (action != null && action.equals(getResources().getString(R.string.activity_intent_filter_action))) {
+                //  Received a barcode scan
+                try {
+                    displayScanResult(intent);
+                } catch (Exception e) {
+                    //  Catch if the UI does not exist when we receive the broadcast
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,37 +95,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(myBroadcastReceiver);
     }
-
-    //
-    // After registering the broadcast receiver, the next step (below) is to define it.
-    // Here it's done in the MainActivity.java, but also can be handled by a separate class.
-    // The logic of extracting the scanned data and displaying it on the screen
-    // is executed in its own method (later in the code). Note the use of the
-    // extra keys defined in the strings.xml file.
-    //
-    private BroadcastReceiver myBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            //Bundle b = intent.getExtras();
-
-            //  This is useful for debugging to verify the format of received intents from DataWedge
-            //for (String key : b.keySet())
-            //{
-            //    Log.v(LOG_TAG, key);
-            //}
-
-            if (action != null && action.equals(getResources().getString(R.string.activity_intent_filter_action))) {
-                //  Received a barcode scan
-                try {
-                    displayScanResult(intent);
-                } catch (Exception e) {
-                    //  Catch if the UI does not exist when we receive the broadcast
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
 
     //
     // The section below assumes that a UI exists in which to place the data. A production
