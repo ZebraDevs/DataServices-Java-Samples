@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SettingsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_settings"></activity>
         <activity
             android:name=".ItemListActivity"
