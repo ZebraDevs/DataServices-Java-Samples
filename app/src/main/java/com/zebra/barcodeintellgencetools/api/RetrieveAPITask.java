@@ -25,13 +25,13 @@ public class RetrieveAPITask extends AsyncTask<String, Void, Object> {
                 case "lookup":
                     return UPCLookup.lookup(args[1]);
                 case "deviceSearch":
-                    return FDARecall.deviceSearch(args[1]);
+                    return FDARecall.deviceSearch(args[1]).toString(2);
                 case "drugSearch":
-                    return FDARecall.drugSearch(args[1]);
+                    return FDARecall.drugSearch(args[1]).toString(2);
                 case "drugUpc":
-                    return FDARecall.drugUpc(args[1]);
+                    return FDARecall.drugUpc(args[1]).toString(2);
                 case "foodUpc":
-                    return FDARecall.foodUpc(args[1]);
+                    return FDARecall.foodUpc(args[1]).toString(2);
             }
         } catch (Exception e) {
             this.exception = e;
@@ -40,15 +40,15 @@ public class RetrieveAPITask extends AsyncTask<String, Void, Object> {
     }
 
     protected void onPostExecute(Object apiData) {
-        if (exception != null) {
-            try {
+        try {
+            if (exception != null) {
                 ItemDetailFragment.Instance.onPostExecute(new JSONObject(exception.getMessage()).toString(2));
-            } catch (JSONException e) {
-                ItemDetailFragment.Instance.onPostExecute("Could not connect to service.");
-            }
 
-        } else {
-            ItemDetailFragment.Instance.onPostExecute(apiData);
+            } else {
+                ItemDetailFragment.Instance.onPostExecute(apiData);
+            }
+        } catch (JSONException e) {
+            ItemDetailFragment.Instance.onPostExecute("Could not connect to service.");
         }
     }
 }
