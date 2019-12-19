@@ -26,12 +26,23 @@
         android:layout_height="wrap_content"
         android:text="@string/create_barcode" />
 
-    <ImageView
-        android:id="@+id/barcode"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="fitStart"
-        app:srcCompat="?android:attr/panelBackground" />
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/barcode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
+            app:srcCompat="?android:attr/panelBackground" />
+
+        <TextView
+            android:id="@+id/resultData"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </FrameLayout>
 
 </LinearLayout>

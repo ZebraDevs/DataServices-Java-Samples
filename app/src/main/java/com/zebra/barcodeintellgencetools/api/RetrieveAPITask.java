@@ -42,9 +42,9 @@ public class RetrieveAPITask extends AsyncTask<String, Void, Object> {
     protected void onPostExecute(Object apiData) {
         if (exception != null) {
             try {
-                ItemDetailFragment.Instance.onPostExecute(new JSONObject(exception.getMessage()));
+                ItemDetailFragment.Instance.onPostExecute(new JSONObject(exception.getMessage()).toString(2));
             } catch (JSONException e) {
-                e.printStackTrace();
+                ItemDetailFragment.Instance.onPostExecute("Could not connect to service.");
             }
 
         } else {

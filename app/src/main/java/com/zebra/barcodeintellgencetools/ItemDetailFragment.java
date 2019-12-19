@@ -25,9 +25,6 @@ import com.zebra.barcodeintellgencetools.api.RetrieveAPITask;
 import com.zebra.savanna.BaseAPI;
 import com.zebra.savanna.Symbology;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Arrays;
 
 /**
@@ -60,25 +57,24 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
     public void onPostExecute(Object apiData) {
         ViewGroup root = (ViewGroup) getView();
         if (root == null) return;
+        ImageView barcode = root.findViewById(R.id.barcode);
+        TextView results = root.findViewById(R.id.resultData);
         if (apiData instanceof byte[]) {
-            ImageView barcode = root.findViewById(R.id.barcode);
             byte[] data = (byte[]) apiData;
             barcodeImage = BitmapFactory.decodeByteArray(data, 0, data.length);
             barcode.setImageBitmap(barcodeImage);
+            barcode.setVisibility(View.VISIBLE);
+            results.setVisibility(View.GONE);
         } else {
-            JSONObject json = (JSONObject) apiData;
-            TextView results = root.findViewById(R.id.resultData);
-            if (results != null) {
-                try {
-                    if (details.equals("")) {
-                        details = json.toString(2);
-                    } else
-                        details += "\n" + json.toString(2);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                results.setText(details);
-            }
+            String json = (String) apiData;
+            results.setVisibility(View.VISIBLE);
+            if (details.equals("")) {
+                details = json;
+            } else
+                details += "\n" + json;
+            results.setText(details);
+            if (barcode != null)
+                barcode.setVisibility(View.GONE);
         }
     }
 
@@ -87,7 +83,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
         if (root == null) return;
         TextView results = root.findViewById(R.id.resultData);
         symbology = symbology.substring("label-type-".length());
-        if (symbology.equals("upce0")){
+        if (symbology.equals("upce0")) {
             symbology = "upce";
             if (barcode.length() == 6)
                 barcode = "0" + barcode + "0";
@@ -111,6 +107,8 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
             case "3":
                 details = "";
                 results.setText(details);
+                EditText upc = root.findViewById(R.id.upc);
+                upc.setText(barcode);
                 new RetrieveAPITask().execute("lookup", barcode);
         }
     }
@@ -157,15 +155,26 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
             switch (mItem.id) {
                 case "1":
                     View createView = inflater.inflate(R.layout.create_barcode, container, false);
+
+                    TextView createResults = createView.findViewById(R.id.resultData);
+                    createResults.setText(details);
+
+                    Button create = createView.findViewById(R.id.createBarcode);
+                    create.setOnClickListener(this);
+
                     Spinner types = createView.findViewById(R.id.barcodeTypes);
                     Context context = getContext();
                     if (context != null)
                         types.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, Symbology.values()));
-                    Button create = createView.findViewById(R.id.createBarcode);
-                    create.setOnClickListener(this);
-                    if (barcodeImage != null) {
-                        ImageView barcode = createView.findViewById(R.id.barcode);
+
+                    ImageView barcode = createView.findViewById(R.id.barcode);
+                    if (barcodeImage == null && details.equals("")) {
+                        barcode.setVisibility(View.GONE);
+                        createResults.setVisibility(View.VISIBLE);
+                    } else {
                         barcode.setImageBitmap(barcodeImage);
+                        barcode.setVisibility(View.VISIBLE);
+                        createResults.setVisibility(View.GONE);
                     }
                     root.addView(createView);
                     break;
@@ -174,19 +183,17 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                     Button recalls = recallView.findViewById(R.id.fdaSearch);
                     recalls.setOnClickListener(this);
                     TextView recallResults = recallView.findViewById(R.id.resultData);
-                    if (details.equals(""))
-                        recallResults.setText(R.string.fda_scan);
-                    else
-                        recallResults.setText(details);
+                    recallResults.setText(details);
                     root.addView(recallView);
                     break;
                 case "3":
                     View lookupView = inflater.inflate(R.layout.upc_lookup, container, false);
                     TextView results = lookupView.findViewById(R.id.resultData);
-                    if (details.equals(""))
-                        results.setText(R.string.scan);
-                    else
-                        results.setText(details);
+                    results.setText(details);
+
+                    Button lookup = lookupView.findViewById(R.id.upc_lookup);
+                    lookup.setOnClickListener(this);
+
                     root.addView(lookupView);
                     break;
             }
@@ -199,20 +206,24 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         ViewGroup root = (ViewGroup) this.getView();
         if (root == null) return;
+
         TextView results = root.findViewById(R.id.resultData);
+        details = "";
+        results.setText(details);
         switch (mItem.id) {
             case "1":
                 EditText barcodeText = root.findViewById(R.id.barcodeText);
                 Spinner barcodeType = root.findViewById(R.id.barcodeTypes);
-
                 new RetrieveAPITask().execute("create", barcodeText.getText().toString(), barcodeType.getSelectedItem().toString());
                 return;
             case "2":
-                details = "";
-                results.setText(details);
                 EditText searchText = root.findViewById(R.id.fdaSearchTerm);
                 new RetrieveAPITask().execute("deviceSearch", searchText.getText().toString());
                 new RetrieveAPITask().execute("drugSearch", searchText.getText().toString());
+                return;
+            case "3":
+                EditText lookupText = root.findViewById(R.id.upc);
+                new RetrieveAPITask().execute("lookup", lookupText.getText().toString());
         }
     }
 }
