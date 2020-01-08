@@ -1,10 +1,10 @@
-package com.zebra.barcodeintellgencetools.api;
+package com.zebra.barcodeintelligencetools.api;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.zebra.barcodeintellgencetools.R;
+import com.zebra.barcodeintelligencetools.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

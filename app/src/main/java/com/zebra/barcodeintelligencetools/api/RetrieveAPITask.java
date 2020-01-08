@@ -1,10 +1,10 @@
-package com.zebra.barcodeintellgencetools.api;
+package com.zebra.barcodeintelligencetools.api;
 
 
 import android.os.AsyncTask;
 
-import com.zebra.barcodeintellgencetools.ItemDetailFragment;
-import com.zebra.barcodeintellgencetools.ItemListActivity;
+import com.zebra.barcodeintelligencetools.ItemDetailFragment;
+import com.zebra.barcodeintelligencetools.ItemListActivity;
 import com.zebra.savanna.CreateBarcode;
 import com.zebra.savanna.FDARecall;
 import com.zebra.savanna.Rotation;

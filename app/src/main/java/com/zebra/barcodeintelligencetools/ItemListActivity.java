@@ -1,4 +1,4 @@
-package com.zebra.barcodeintellgencetools;
+package com.zebra.barcodeintelligencetools;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.zebra.barcodeintellgencetools.api.APIContent;
+import com.zebra.barcodeintelligencetools.api.APIContent;
 
 import java.util.List;
 

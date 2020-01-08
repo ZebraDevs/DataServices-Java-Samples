@@ -1,4 +1,4 @@
-package com.zebra.barcodeintellgencetools;
+package com.zebra.barcodeintelligencetools;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,8 +20,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.zebra.barcodeintellgencetools.api.APIContent;
-import com.zebra.barcodeintellgencetools.api.RetrieveAPITask;
+import com.zebra.barcodeintelligencetools.api.APIContent;
+import com.zebra.barcodeintelligencetools.api.RetrieveAPITask;
 import com.zebra.savanna.BaseAPI;
 import com.zebra.savanna.Symbology;
 
