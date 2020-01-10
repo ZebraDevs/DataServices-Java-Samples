@@ -170,8 +170,8 @@ namespace BarcodeIntelligenceTools
 
             public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
             {
-                ((ViewHolder)holder).mIdView.Text = _values[position].Id;
-                ((ViewHolder)holder).mContentView.Text = _values[position].Content;
+                ((ViewHolder)holder).IdView.Text = _values[position].Id;
+                ((ViewHolder)holder).ContentView.Text = _values[position].Content;
 
                 holder.ItemView.Tag = _values[position];
                 holder.ItemView.SetOnClickListener(this);
@@ -181,13 +181,13 @@ namespace BarcodeIntelligenceTools
 
             public class ViewHolder : RecyclerView.ViewHolder
             {
-                public readonly TextView mIdView;
-                public readonly TextView mContentView;
+                public readonly TextView IdView;
+                public readonly TextView ContentView;
 
                 public ViewHolder(View view) : base(view)
                 {
-                    mIdView = view.FindViewById<TextView>(Resource.Id.id_text);
-                    mContentView = view.FindViewById<TextView>(Resource.Id.content);
+                    IdView = view.FindViewById<TextView>(Resource.Id.id_text);
+                    ContentView = view.FindViewById<TextView>(Resource.Id.content);
                 }
             }
         }
