@@ -31,11 +31,11 @@ namespace BarcodeIntelligenceTools
         // is executed in its own method (later in the code). Note the use of the
         // extra keys defined in the strings.xml file.
         //
-        private readonly BroadcastReceiver myBroadcastReceiver;
+        private readonly BroadcastReceiver _broadcastReceiver;
 
         public ItemDetailActivity()
         {
-            myBroadcastReceiver = new SavannaBroadcastReceiver(this);
+            _broadcastReceiver = new SavannaBroadcastReceiver(this);
         }
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -79,13 +79,13 @@ namespace BarcodeIntelligenceTools
             IntentFilter filter = new IntentFilter();
             filter.AddCategory(Intent.CategoryDefault);
             filter.AddAction(Resources.GetString(Resource.String.activity_intent_filter_action));
-            RegisterReceiver(myBroadcastReceiver, filter);
+            RegisterReceiver(_broadcastReceiver, filter);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            UnregisterReceiver(myBroadcastReceiver);
+            UnregisterReceiver(_broadcastReceiver);
         }
 
         //

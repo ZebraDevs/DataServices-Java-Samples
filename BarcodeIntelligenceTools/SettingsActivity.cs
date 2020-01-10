@@ -44,7 +44,7 @@ namespace BarcodeIntelligenceTools
             return base.OnOptionsItemSelected(item);
         }
 
-        public class SettingsFragment : PreferenceFragmentCompat
+        class SettingsFragment : PreferenceFragmentCompat
         {
             public override void OnCreatePreferences(Bundle savedInstanceState, string rootKey)
             {

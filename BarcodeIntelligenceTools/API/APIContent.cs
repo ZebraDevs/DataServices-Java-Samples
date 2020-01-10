@@ -10,33 +10,33 @@ namespace BarcodeIntelligenceTools.API
         /// <summary>
         /// A map of API items, by ID.
         /// </summary>
-        public static readonly Dictionary<string, JavaObjectWrapper<ApiItem>> Items = new Dictionary<string, JavaObjectWrapper<ApiItem>>();
+        public static readonly Dictionary<string, ApiItem> Items = new Dictionary<string, ApiItem>();
 
         public static void AddItem(ApiItem item)
         {
-            Items[item.id] = new JavaObjectWrapper<ApiItem> { Item = item, };
+            Items[item.Id] = item;
         }
     }
 
     /// <summary>
     /// An item representing a piece of API content.
     /// </summary>
-    public class ApiItem
+    public class ApiItem : Java.Lang.Object
     {
-        public readonly string id;
-        public readonly string content;
-        public readonly string details;
+        public readonly string Id;
+        public readonly string Content;
+        public readonly string Details;
 
         public ApiItem(string id, string content, string details)
         {
-            this.id = id;
-            this.content = content;
-            this.details = details;
+            Id = id;
+            Content = content;
+            Details = details;
         }
 
         public override string ToString()
         {
-            return content;
+            return Content;
         }
     }
 }

@@ -11,26 +11,26 @@ using System.Collections.Generic;
 
 namespace BarcodeIntelligenceTools
 {
-    /**
-     * An activity representing a list of Items. This activity
-     * has different presentations for handset and tablet-size devices. On
-     * handsets, the activity presents a list of items, which when touched,
-     * lead to a {@link ItemDetailActivity} representing
-     * item details. On tablets, the activity presents the list of items and
-     * item details side-by-side using two vertical panes.
-     */
+    /// <summary>
+    /// An activity representing a list of Items. This activity
+    /// has different presentations for handset and tablet-size devices. On
+    /// handsets, the activity presents a list of items, which when touched,
+    /// lead to a <see cref="ItemDetailActivity"/> representing
+    /// item details. On tablets, the activity presents the list of items and
+    /// item details side-by-side using two vertical panes.
+    /// </summary>
     [Activity(MainLauncher = true,
         Name = "com.zebra.barcodeintelligencetools.ItemListActivity",
         Label = "@string/app_name",
         Theme = "@style/AppTheme.NoActionBar")]
     public class ItemListActivity : AppCompatActivity, IScanReceiver
     {
-        public static int density;
+        public static int Density { get; set; }
 
         /// <summary>
         /// Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
         /// </summary>
-        private bool mTwoPane;
+        private bool _twoPane;
         //
         // After registering the broadcast receiver, the next step (below) is to define it.
         // Here it's done in the MainActivity.cs, but also can be handled by a separate class.
@@ -38,11 +38,11 @@ namespace BarcodeIntelligenceTools
         // is executed in its own method (later in the code). Note the use of the
         // extra keys defined in the strings.xml file.
         //
-        private readonly BroadcastReceiver myBroadcastReceiver;
+        private readonly BroadcastReceiver _broadcastReceiver;
 
         public ItemListActivity()
         {
-            myBroadcastReceiver = new SavannaBroadcastReceiver(this);
+            _broadcastReceiver = new SavannaBroadcastReceiver(this);
         }
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -65,7 +65,7 @@ namespace BarcodeIntelligenceTools
                 // large-screen layouts (res/values-w900dp).
                 // If this view is present, then the
                 // activity should be in two-pane mode.
-                mTwoPane = true;
+                _twoPane = true;
             }
 
             View recyclerView = FindViewById(Resource.Id.item_list);
@@ -73,8 +73,8 @@ namespace BarcodeIntelligenceTools
             IntentFilter filter = new IntentFilter();
             filter.AddCategory(Intent.CategoryDefault);
             filter.AddAction(Resources.GetString(Resource.String.activity_intent_filter_action));
-            RegisterReceiver(myBroadcastReceiver, filter);
-            density = (int)Math.Ceiling(Resources.DisplayMetrics.Density);
+            RegisterReceiver(_broadcastReceiver, filter);
+            Density = (int)Math.Ceiling(Resources.DisplayMetrics.Density);
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -91,7 +91,7 @@ namespace BarcodeIntelligenceTools
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            UnregisterReceiver(myBroadcastReceiver);
+            UnregisterReceiver(_broadcastReceiver);
         }
 
         //
@@ -100,7 +100,7 @@ namespace BarcodeIntelligenceTools
         //
         public void DisplayScanResult(Intent initiatingIntent)
         {
-            if (!mTwoPane) return;
+            if (!_twoPane) return;
             string decodedData = initiatingIntent.GetStringExtra(Resources.GetString(Resource.String.datawedge_intent_key_data));
             string decodedLabelType = initiatingIntent.GetStringExtra(Resources.GetString(Resource.String.datawedge_intent_key_label_type)).ToLower();
 
@@ -119,28 +119,28 @@ namespace BarcodeIntelligenceTools
 
         private void SetupRecyclerView(RecyclerView recyclerView)
         {
-            var items = new List<JavaObjectWrapper<ApiItem>>(APIContent.Items.Values);
-            recyclerView.SetAdapter(new SimpleItemRecyclerViewAdapter(this, items, mTwoPane));
+            var items = new List<ApiItem>(APIContent.Items.Values);
+            recyclerView.SetAdapter(new SimpleItemRecyclerViewAdapter(this, items, _twoPane));
         }
 
         class SimpleItemRecyclerViewAdapter : RecyclerView.Adapter, View.IOnClickListener
         {
-            private readonly ItemListActivity mParentActivity;
-            private readonly List<JavaObjectWrapper<ApiItem>> mValues;
-            private readonly bool mTwoPane;
+            private readonly ItemListActivity _parentActivity;
+            private readonly List<ApiItem> _values;
+            private readonly bool _twoPane;
 
             public void OnClick(View view)
             {
-                ApiItem item = ((JavaObjectWrapper<ApiItem>)view.Tag).Item;
-                if (mTwoPane)
+                ApiItem item = (ApiItem)view.Tag;
+                if (_twoPane)
                 {
                     Bundle arguments = new Bundle();
-                    arguments.PutString(ItemDetailFragment.ArgItemId, item.id);
+                    arguments.PutString(ItemDetailFragment.ArgItemId, item.Id);
                     ItemDetailFragment fragment = new ItemDetailFragment
                     {
                         Arguments = arguments
                     };
-                    mParentActivity.SupportFragmentManager.BeginTransaction()
+                    _parentActivity.SupportFragmentManager.BeginTransaction()
                             .Replace(Resource.Id.item_detail_container, fragment)
                             .Commit();
                 }
@@ -148,38 +148,36 @@ namespace BarcodeIntelligenceTools
                 {
                     Context context = view.Context;
                     Intent intent = new Intent(context, typeof(ItemDetailActivity));
-                    intent.PutExtra(ItemDetailFragment.ArgItemId, item.id);
+                    intent.PutExtra(ItemDetailFragment.ArgItemId, item.Id);
 
                     context.StartActivity(intent);
                 }
             }
 
-            public SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                           List<JavaObjectWrapper<ApiItem>> items,
-                                           bool twoPane)
+            public SimpleItemRecyclerViewAdapter(ItemListActivity parent, List<ApiItem> items, bool twoPane)
             {
-                mValues = items;
-                mParentActivity = parent;
-                mTwoPane = twoPane;
+                _values = items;
+                _parentActivity = parent;
+                _twoPane = twoPane;
             }
 
             public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
             {
-                View view = LayoutInflater.From(parent.Context)
+                var view = LayoutInflater.From(parent.Context)
                     .Inflate(Resource.Layout.item_list_content, parent, false);
                 return new ViewHolder(view);
             }
 
             public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
             {
-                ((ViewHolder)holder).mIdView.Text = mValues[position].Item.id;
-                ((ViewHolder)holder).mContentView.Text = mValues[position].Item.content;
+                ((ViewHolder)holder).mIdView.Text = _values[position].Id;
+                ((ViewHolder)holder).mContentView.Text = _values[position].Content;
 
-                holder.ItemView.Tag = mValues[position];
+                holder.ItemView.Tag = _values[position];
                 holder.ItemView.SetOnClickListener(this);
             }
 
-            public override int ItemCount { get => mValues.Count; }
+            public override int ItemCount { get => _values.Count; }
 
             public class ViewHolder : RecyclerView.ViewHolder
             {

@@ -4,10 +4,10 @@ namespace BarcodeIntelligenceTools
 {
     public class SavannaBroadcastReceiver : BroadcastReceiver
     {
-        IScanReceiver activity;
+        IScanReceiver _activity;
         public SavannaBroadcastReceiver(IScanReceiver activity)
         {
-            this.activity = activity;
+            _activity = activity;
         }
 
         public override void OnReceive(Context context, Intent intent)
@@ -26,7 +26,7 @@ namespace BarcodeIntelligenceTools
                 //  Received a barcode scan
                 try
                 {
-                    activity.DisplayScanResult(intent);
+                    _activity.DisplayScanResult(intent);
                 }
                 catch
                 {

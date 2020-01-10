@@ -27,13 +27,13 @@ namespace BarcodeIntelligenceTools
         /// represents.
         /// </summary>
         public const string ArgItemId = "item_id";
-        public static ItemDetailFragment Instance;
+        public static ItemDetailFragment Instance { get; set; }
         /// <summary>
         /// The item content this fragment is presenting.
         /// </summary>
         private static ApiItem _item;
-        private static string details = "";
-        private static Bitmap barcodeImage;
+        private static string _details = "";
+        private static Bitmap _barcodeImage;
 
         /// <summary>
         /// Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,8 +51,8 @@ namespace BarcodeIntelligenceTools
             TextView results = root.FindViewById<TextView>(Resource.Id.resultData);
             if (apiData is byte[] data)
             {
-                barcodeImage = BitmapFactory.DecodeByteArray(data, 0, data.Length);
-                barcode.SetImageBitmap(barcodeImage);
+                _barcodeImage = BitmapFactory.DecodeByteArray(data, 0, data.Length);
+                barcode.SetImageBitmap(_barcodeImage);
                 barcode.Visibility = ViewStates.Visible;
                 results.Visibility = ViewStates.Gone;
             }
@@ -72,15 +72,15 @@ namespace BarcodeIntelligenceTools
             {
                 string json = (string)apiData;
                 results.Visibility = ViewStates.Visible;
-                if (details.Length == 0)
+                if (_details.Length == 0)
                 {
-                    details = json;
+                    _details = json;
                 }
                 else
                 {
-                    details += "\n" + json;
+                    _details += "\n" + json;
                 }
-                results.Text = details;
+                results.Text = _details;
                 if (barcode != null)
                     barcode.Visibility = ViewStates.Gone;
             }
@@ -97,7 +97,7 @@ namespace BarcodeIntelligenceTools
                 if (barcode.Length == 6)
                     barcode = "0" + barcode + "0";
             }
-            switch (_item.id)
+            switch (_item.Id)
             {
                 case "1":
                     EditText barcodeText = root.FindViewById<EditText>(Resource.Id.barcodeText);
@@ -109,8 +109,8 @@ namespace BarcodeIntelligenceTools
                         barcodeType.SetSelection(index);
                     return;
                 case "2":
-                    details = "";
-                    results.Text = details;
+                    _details = "";
+                    results.Text = _details;
                     try
                     {
                         OnPostExecute(await FDARecall.FoodUpcAsync(barcode));
@@ -129,8 +129,8 @@ namespace BarcodeIntelligenceTools
                     }
                     return;
                 case "3":
-                    details = "";
-                    results.Text = details;
+                    _details = "";
+                    results.Text = _details;
                     EditText upc = root.FindViewById<EditText>(Resource.Id.upc);
                     upc.Text = barcode;
                     try
@@ -155,10 +155,10 @@ namespace BarcodeIntelligenceTools
             {
                 string key = args.GetString(ArgItemId);
 
-                if (_item != null && key != null && !key.Equals(_item.id))
+                if (_item != null && key != null && !key.Equals(_item.Id))
                 {
-                    barcodeImage = null;
-                    details = "";
+                    _barcodeImage = null;
+                    _details = "";
                 }
 
                 // Load the item content specified by the fragment
@@ -170,7 +170,7 @@ namespace BarcodeIntelligenceTools
                 var appBarLayout = activity?.FindViewById<CollapsingToolbarLayout>(Resource.Id.toolbar_layout);
                 if (appBarLayout != null)
                 {
-                    appBarLayout.SetTitle(_item.content);
+                    appBarLayout.SetTitle(_item.Content);
                 }
             }
         }
@@ -184,15 +184,15 @@ namespace BarcodeIntelligenceTools
             // Show the item content as text in a TextView.
             if (_item != null)
             {
-                root.FindViewById<TextView>(Resource.Id.item_detail).Text = _item.details;
+                root.FindViewById<TextView>(Resource.Id.item_detail).Text = _item.Details;
 
-                switch (_item.id)
+                switch (_item.Id)
                 {
                     case "1":
                         View createView = inflater.Inflate(Resource.Layout.create_barcode, container, false);
 
                         TextView createResults = createView.FindViewById<TextView>(Resource.Id.resultData);
-                        createResults.Text = details;
+                        createResults.Text = _details;
 
                         Button create = createView.FindViewById<Button>(Resource.Id.createBarcode);
                         create.SetOnClickListener(this);
@@ -207,14 +207,14 @@ namespace BarcodeIntelligenceTools
                             types.Adapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleSpinnerDropDownItem, values.Select(s => s.ToString().Replace('_', '-')).ToList());
                         }
                         ImageView barcode = createView.FindViewById<ImageView>(Resource.Id.barcode);
-                        if (barcodeImage == null && details.Equals(""))
+                        if (_barcodeImage == null && _details.Equals(""))
                         {
                             barcode.Visibility = ViewStates.Gone;
                             createResults.Visibility = ViewStates.Visible;
                         }
                         else
                         {
-                            barcode.SetImageBitmap(barcodeImage);
+                            barcode.SetImageBitmap(_barcodeImage);
                             barcode.Visibility = ViewStates.Visible;
                             createResults.Visibility = ViewStates.Gone;
                         }
@@ -225,13 +225,13 @@ namespace BarcodeIntelligenceTools
                         Button recalls = recallView.FindViewById<Button>(Resource.Id.fdaSearch);
                         recalls.SetOnClickListener(this);
                         TextView recallResults = recallView.FindViewById<TextView>(Resource.Id.resultData);
-                        recallResults.Text = details;
+                        recallResults.Text = _details;
                         root.AddView(recallView);
                         break;
                     case "3":
                         View lookupView = inflater.Inflate(Resource.Layout.upc_lookup, container, false);
                         TextView results = lookupView.FindViewById<TextView>(Resource.Id.resultData);
-                        results.Text = details;
+                        results.Text = _details;
 
                         Button lookup = lookupView.FindViewById<Button>(Resource.Id.upc_lookup);
                         lookup.SetOnClickListener(this);
@@ -249,17 +249,17 @@ namespace BarcodeIntelligenceTools
             if (!(View is ViewGroup root)) return;
 
             TextView results = root.FindViewById<TextView>(Resource.Id.resultData);
-            details = "";
-            results.Text = details;
+            _details = "";
+            results.Text = _details;
             try
             {
-                switch (_item.id)
+                switch (_item.Id)
                 {
                     case "1":
                         EditText barcodeText = root.FindViewById<EditText>(Resource.Id.barcodeText);
                         Spinner barcodeType = root.FindViewById<Spinner>(Resource.Id.barcodeTypes);
                         var symbology = Enum.Parse<Symbology>(barcodeType.SelectedItem.ToString().Replace('-', '_'));
-                        OnPostExecute(await CreateBarcode.CreateAsync(symbology, barcodeText.Text, ItemListActivity.density, Rotation.Normal, true));
+                        OnPostExecute(await CreateBarcode.CreateAsync(symbology, barcodeText.Text, ItemListActivity.Density, Rotation.Normal, true));
                         return;
                     case "2":
                         EditText searchText = root.FindViewById<EditText>(Resource.Id.fdaSearchTerm);
