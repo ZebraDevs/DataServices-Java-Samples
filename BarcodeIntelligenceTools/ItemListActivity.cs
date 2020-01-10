@@ -1,3 +1,4 @@
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
@@ -18,14 +19,17 @@ namespace BarcodeIntelligenceTools
      * item details. On tablets, the activity presents the list of items and
      * item details side-by-side using two vertical panes.
      */
-    public partial class ItemListActivity : AppCompatActivity, IScanReceiver
+    [Activity(MainLauncher = true,
+        Name = "com.zebra.barcodeintelligencetools.ItemListActivity",
+        Label = "@string/app_name",
+        Theme = "@style/AppTheme.NoActionBar")]
+    public class ItemListActivity : AppCompatActivity, IScanReceiver
     {
         public static int density;
-        APIContent content;
-        /**
-         * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-         * device.
-         */
+
+        /// <summary>
+        /// Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
+        /// </summary>
         private bool mTwoPane;
         //
         // After registering the broadcast receiver, the next step (below) is to define it.
@@ -34,7 +38,7 @@ namespace BarcodeIntelligenceTools
         // is executed in its own method (later in the code). Note the use of the
         // extra keys defined in the strings.xml file.
         //
-        private BroadcastReceiver myBroadcastReceiver;
+        private readonly BroadcastReceiver myBroadcastReceiver;
 
         public ItemListActivity()
         {
@@ -46,7 +50,10 @@ namespace BarcodeIntelligenceTools
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_item_list);
 
-            content = new APIContent(this);
+            APIContent.Items.Clear();
+            APIContent.AddItem(new ApiItem("1", GetString(Resource.String.create_barcode), GetString(Resource.String.create_barcode_details)));
+            APIContent.AddItem(new ApiItem("2", GetString(Resource.String.fda_recall), GetString(Resource.String.fda_recall_details)));
+            APIContent.AddItem(new ApiItem("3", GetString(Resource.String.upc_lookup), GetString(Resource.String.upc_lookup_details)));
 
             var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
@@ -100,7 +107,7 @@ namespace BarcodeIntelligenceTools
             Console.WriteLine("decodedData: " + decodedData);
             Console.WriteLine("decodedLabelType: " + decodedLabelType);
 
-            ItemDetailFragment.Instance.routeScanData(decodedData, decodedLabelType);
+            ItemDetailFragment.Instance.RouteScanData(decodedData, decodedLabelType);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -112,13 +119,12 @@ namespace BarcodeIntelligenceTools
 
         private void SetupRecyclerView(RecyclerView recyclerView)
         {
-            recyclerView.SetAdapter(new SimpleItemRecyclerViewAdapter(this, APIContent.ITEMS, mTwoPane));
+            var items = new List<JavaObjectWrapper<ApiItem>>(APIContent.Items.Values);
+            recyclerView.SetAdapter(new SimpleItemRecyclerViewAdapter(this, items, mTwoPane));
         }
 
-        public class SimpleItemRecyclerViewAdapter :
-             RecyclerView.Adapter, View.IOnClickListener
+        class SimpleItemRecyclerViewAdapter : RecyclerView.Adapter, View.IOnClickListener
         {
-
             private readonly ItemListActivity mParentActivity;
             private readonly List<JavaObjectWrapper<ApiItem>> mValues;
             private readonly bool mTwoPane;
@@ -129,7 +135,7 @@ namespace BarcodeIntelligenceTools
                 if (mTwoPane)
                 {
                     Bundle arguments = new Bundle();
-                    arguments.PutString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.PutString(ItemDetailFragment.ArgItemId, item.id);
                     ItemDetailFragment fragment = new ItemDetailFragment
                     {
                         Arguments = arguments
@@ -142,7 +148,7 @@ namespace BarcodeIntelligenceTools
                 {
                     Context context = view.Context;
                     Intent intent = new Intent(context, typeof(ItemDetailActivity));
-                    intent.PutExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    intent.PutExtra(ItemDetailFragment.ArgItemId, item.id);
 
                     context.StartActivity(intent);
                 }
@@ -173,13 +179,7 @@ namespace BarcodeIntelligenceTools
                 holder.ItemView.SetOnClickListener(this);
             }
 
-            public override int ItemCount
-            {
-                get
-                {
-                    return mValues.Count;
-                }
-            }
+            public override int ItemCount { get => mValues.Count; }
 
             public class ViewHolder : RecyclerView.ViewHolder
             {

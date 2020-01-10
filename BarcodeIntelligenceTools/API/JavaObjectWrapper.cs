@@ -1,4 +1,4 @@
-﻿namespace BarcodeIntelligenceTools
+﻿namespace BarcodeIntelligenceTools.API
 {
     public class JavaObjectWrapper<T> : Java.Lang.Object
     {

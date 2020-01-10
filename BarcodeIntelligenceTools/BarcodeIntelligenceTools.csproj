@@ -64,12 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\APIContent.cs" />
-    <Compile Include="API\RetrieveAPITask.cs" />
     <Compile Include="IScanReceiver.cs" />
     <Compile Include="ItemDetailActivity.cs" />
     <Compile Include="ItemDetailFragment.cs" />
     <Compile Include="ItemListActivity.cs" />
-    <Compile Include="JavaObjectWrapper.cs" />
+    <Compile Include="API\JavaObjectWrapper.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SavannaBroadcastReceiver.cs" />

@@ -1,4 +1,4 @@
-
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
@@ -15,6 +15,12 @@ namespace BarcodeIntelligenceTools
     /// item details are presented side-by-side with a list of items
     /// in a <see cref="ListItemActivity" />
     /// </summary>
+    [Activity(Name = "com.zebra.barcodeintelligencetools.ItemDetailActivity",
+        Label = "@string/title_item_detail",
+        ParentActivity = typeof(ItemListActivity),
+        Theme = "@style/AppTheme.NoActionBar")]
+    [MetaData("android.support.PARENT_ACTIVITY",
+        Value ="com.zebra.barcodeintelligencetools.ItemListActivity")]
     public class ItemDetailActivity : AppCompatActivity, IScanReceiver
     {
 
@@ -40,7 +46,7 @@ namespace BarcodeIntelligenceTools
             SetSupportActionBar(toolbar);
 
             // Show the Up button in the action bar.
-            ActionBar actionBar = SupportActionBar;
+            var actionBar = SupportActionBar;
             if (actionBar != null)
             {
                 actionBar.SetDisplayHomeAsUpEnabled(true);
@@ -60,8 +66,8 @@ namespace BarcodeIntelligenceTools
                 // Create the detail fragment and add it to the activity
                 // using a fragment transaction.
                 Bundle arguments = new Bundle();
-                arguments.PutString(ItemDetailFragment.ARG_ITEM_ID,
-                        Intent.GetStringExtra(ItemDetailFragment.ARG_ITEM_ID));
+                arguments.PutString(ItemDetailFragment.ArgItemId,
+                        Intent.GetStringExtra(ItemDetailFragment.ArgItemId));
                 ItemDetailFragment fragment = new ItemDetailFragment
                 {
                     Arguments = arguments
@@ -94,7 +100,7 @@ namespace BarcodeIntelligenceTools
             Console.WriteLine("decodedData: " + decodedData);
             Console.WriteLine("decodedLabelType: " + decodedLabelType);
 
-            ItemDetailFragment.Instance.routeScanData(decodedData, decodedLabelType);
+            ItemDetailFragment.Instance.RouteScanData(decodedData, decodedLabelType);
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

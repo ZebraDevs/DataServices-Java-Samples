@@ -1,3 +1,4 @@
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
@@ -7,6 +8,8 @@ using AndroidX.Preference;
 
 namespace BarcodeIntelligenceTools
 {
+    [Activity(Name = "com.zebra.barcodeintelligencetools.SettingsActivity",
+        Label = "@string/title_activity_settings")]
     public class SettingsActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -17,7 +20,7 @@ namespace BarcodeIntelligenceTools
                     .BeginTransaction()
                     .Replace(Resource.Id.settings, new SettingsFragment())
                     .Commit();
-            ActionBar actionBar = SupportActionBar;
+            var actionBar = SupportActionBar;
             if (actionBar != null)
             {
                 actionBar.SetDisplayHomeAsUpEnabled(true);
