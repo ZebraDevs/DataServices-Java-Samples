@@ -6,4 +6,4 @@ Create a DataWedge profile:
 * Configure scanner settings to decode desired barcode types
 * Enable intent output
 * Set intent action to com.zebra.SCAN
-* Change intent delivery to to Broadcast intent
+* Change intent delivery to Broadcast intent
