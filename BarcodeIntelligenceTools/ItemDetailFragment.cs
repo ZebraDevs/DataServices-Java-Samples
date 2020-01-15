@@ -194,9 +194,8 @@ namespace BarcodeIntelligenceTools
             var sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(Context);
 
             // Set Zebra Savanna API key
-            BaseAPI.APIKey = sharedPreferences.GetString("apikey", "");
+            SavannaAPI.APIKey = sharedPreferences.GetString("apikey", "");
 
-            Console.WriteLine(BaseAPI.APIKey);
             // Show the item content as text in a TextView.
             if (_item != null)
             {
