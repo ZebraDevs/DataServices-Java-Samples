@@ -43,6 +43,10 @@ namespace BarcodeIntelligenceTools
         {
         }
 
+        /// <summary>
+        /// Handle a response from Zebra Savanna APIs
+        /// </summary>
+        /// <param name="apiData">An object representing a json string, <see cref="byte[]"/>, or <see cref="Error{T}"/>.</param>
         private void OnPostExecute(object apiData)
         {
             ViewGroup root = (ViewGroup)View;
@@ -113,7 +117,10 @@ namespace BarcodeIntelligenceTools
                     results.Text = _details;
                     try
                     {
-                        OnPostExecute(await FDARecall.FoodUpcAsync(barcode));
+                        // Call to external Zebra FDA Food Recall API
+                        var foodUpcJson = await FDARecall.FoodUpcAsync(barcode);
+
+                        OnPostExecute(foodUpcJson);
                     }
                     catch (Exception e)
                     {
@@ -121,7 +128,10 @@ namespace BarcodeIntelligenceTools
                     }
                     try
                     {
-                        OnPostExecute(await FDARecall.DrugUpcAsync(barcode));
+                        // Call to external Zebra FDA Drug Recall API
+                        var drugUpcJson = await FDARecall.DrugUpcAsync(barcode);
+
+                        OnPostExecute(drugUpcJson);
                     }
                     catch (Exception e)
                     {
@@ -135,7 +145,10 @@ namespace BarcodeIntelligenceTools
                     upc.Text = barcode;
                     try
                     {
-                        OnPostExecute(await UPCLookup.LookupAsync(barcode));
+                        // Call to external Zebra UPC Lookup API
+                        var upcLookupJson = await UPCLookup.LookupAsync(barcode);
+
+                        OnPostExecute(upcLookupJson);
                     }
                     catch (Exception e)
                     {
@@ -164,7 +177,7 @@ namespace BarcodeIntelligenceTools
                 // Load the item content specified by the fragment
                 // arguments. In a real-world scenario, use a Loader
                 // to load content from a content provider.
-                _item = APIContent.Items[key].Item;
+                _item = APIContent.Items[key];
 
                 var activity = Activity;
                 var appBarLayout = activity?.FindViewById<CollapsingToolbarLayout>(Resource.Id.toolbar_layout);
@@ -179,7 +192,10 @@ namespace BarcodeIntelligenceTools
         {
             var root = (ViewGroup)inflater.Inflate(Resource.Layout.item_detail, container, false);
             var sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(Context);
+
+            // Set Zebra Savanna API key
             BaseAPI.APIKey = sharedPreferences.GetString("apikey", "");
+
             Console.WriteLine(BaseAPI.APIKey);
             // Show the item content as text in a TextView.
             if (_item != null)
@@ -259,23 +275,37 @@ namespace BarcodeIntelligenceTools
                         EditText barcodeText = root.FindViewById<EditText>(Resource.Id.barcodeText);
                         Spinner barcodeType = root.FindViewById<Spinner>(Resource.Id.barcodeTypes);
                         var symbology = Enum.Parse<Symbology>(barcodeType.SelectedItem.ToString().Replace('-', '_'));
-                        OnPostExecute(await CreateBarcode.CreateAsync(symbology, barcodeText.Text, ItemListActivity.Density, Rotation.Normal, true));
+
+                        // Call to external Zebra Create Barcode API
+                        var barcodeBytes = await CreateBarcode.CreateAsync(symbology, barcodeText.Text, ItemListActivity.Density, Rotation.Normal, true);
+                       
+                        OnPostExecute(barcodeBytes);
                         return;
                     case "2":
                         EditText searchText = root.FindViewById<EditText>(Resource.Id.fdaSearchTerm);
                         try
                         {
-                            OnPostExecute(await FDARecall.DeviceSearchAsync(searchText.Text));
+                            // Call to external Zebra FDA Device Recall Search API
+                            var deviceSearchJson = await FDARecall.DeviceSearchAsync(searchText.Text);
+
+                            OnPostExecute(deviceSearchJson);
                         }
                         catch (Exception e)
                         {
                             OnPostExecute(e);
                         }
-                        OnPostExecute(await FDARecall.DrugSearchAsync(searchText.Text));
+                        // Call to external Zebra FDA Drug Recall Search API
+                        var drugSearchJson = await FDARecall.DrugSearchAsync(searchText.Text);
+
+                        OnPostExecute(drugSearchJson);
                         return;
                     case "3":
                         EditText lookupText = root.FindViewById<EditText>(Resource.Id.upc);
-                        OnPostExecute(await UPCLookup.LookupAsync(lookupText.Text));
+
+                        // Call to external Zebra UPC Lookup API
+                        var upcLookupJson = await UPCLookup.LookupAsync(lookupText.Text);
+
+                        OnPostExecute(upcLookupJson);
                         return;
                 }
             }
