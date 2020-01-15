@@ -30,7 +30,7 @@
             Allows for the data included in the barcode to be printed in human readable form with the barcode (usually
             printed text under the linear barcode, this setting is ignored for many 2D symbologies such as qrcode).
             </param>
-            <returns>A <see cref="!:byte[]"/> containing the png-encoded image</returns>
+            <returns>A <see cref="T:byte[]"/> containing the png-encoded image</returns>
         </member>
         <member name="M:Savanna.CreateBarcode.CreateAsync(Savanna.Symbology,System.String,System.Int32,System.Int32,Savanna.Rotation,System.Boolean)">
             <summary>
@@ -54,7 +54,7 @@
             Allows for the data included in the barcode to be printed in human readable form with the barcode (usually
             printed text under the linear barcode, this setting is ignored for many 2D symbologies such as qrcode).
             </param>
-            <returns>A <see cref="!:byte[]"/> containing the png-encoded image</returns>
+            <returns>A <see cref="T:byte[]"/> containing the png-encoded image</returns>
         </member>
         <member name="T:Savanna.FDARecall">
             <summary>
@@ -168,7 +168,7 @@
             Retrieves product information in JSON format for a provided UPC code
             </summary>
             <param name="upc">UPC Code</param>
-            <returns>A <see cref="!:Response"/> containing product information for the provided UPC</returns>
+            <returns>A <see cref="T:Savanna.Models.BarcodeData"/> containing product information for the provided UPC</returns>
         </member>
     </members>
 </doc>
