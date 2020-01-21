@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.zebra.barcodeintelligencetools.api.APIContent;
 import com.zebra.barcodeintelligencetools.api.RetrieveAPITask;
-import com.zebra.savanna.BaseAPI;
+import com.zebra.savanna.SavannaAPI;
 import com.zebra.savanna.Symbology;
 
 import java.util.Arrays;
@@ -94,7 +94,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 barcodeText.setText(barcode);
 
                 Spinner barcodeType = root.findViewById(R.id.barcodeTypes);
-                int index = Arrays.asList(Symbology.values()).indexOf(Symbology.fromString(symbology));
+                int index = Arrays.asList(Symbology.values()).indexOf(Symbology.fromValue(symbology));
                 if (index > -1)
                     barcodeType.setSelection(index);
                 return;
@@ -146,8 +146,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
 
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(getContext());
-        BaseAPI.APIKey = sharedPreferences.getString("apikey", "");
-        System.out.println(BaseAPI.APIKey);
+        SavannaAPI.setAPIKey(sharedPreferences.getString("apikey", ""));
         // Show the item content as text in a TextView.
         if (mItem != null) {
             ((TextView) root.findViewById(R.id.item_detail)).setText(mItem.details);
