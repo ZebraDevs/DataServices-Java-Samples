@@ -11,6 +11,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
 /**
  * An activity representing a single Item detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
@@ -55,6 +57,32 @@ public class ItemDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
         Toolbar toolbar = findViewById(R.id.detail_toolbar);
+        CollapsingToolbarLayout toolbarLayout = findViewById(R.id.toolbar_layout);
+        String itemId = getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID);
+        int color;
+        switch (itemId){
+            case "1":
+                getWindow().setStatusBarColor(getResources().getColor(R.color.colorCreateBarcodeDark));
+                color = getResources().getColor(R.color.colorCreateBarcode);
+                toolbar.setBackgroundColor(color);
+                toolbarLayout.setContentScrimColor(color);
+                toolbarLayout.setBackgroundColor(color);
+                break;
+            case "2":
+                getWindow().setStatusBarColor(getResources().getColor(R.color.colorFdaRecallDark));
+                color = getResources().getColor(R.color.colorFdaRecall);
+                toolbar.setBackgroundColor(color);
+                toolbarLayout.setContentScrimColor(color);
+                toolbarLayout.setBackgroundColor(color);
+                break;
+            case "3":
+                getWindow().setStatusBarColor(getResources().getColor(R.color.colorUpcLookupDark));
+                color = getResources().getColor(R.color.colorUpcLookup);
+                toolbar.setBackgroundColor(color);
+                toolbarLayout.setContentScrimColor(color);
+                toolbarLayout.setBackgroundColor(color);
+                break;
+        }
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
@@ -77,7 +105,7 @@ public class ItemDetailActivity extends AppCompatActivity {
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
+                    itemId);
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

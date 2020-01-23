@@ -21,7 +21,7 @@ public class RetrieveAPITask extends AsyncTask<String, Void, Object> {
         try {
             switch (args[0]) {
                 case "create":
-                    return CreateBarcode.create(Symbology.fromValue(args[2]), args[1], ItemListActivity.density, Rotation.Normal, true);
+                    return CreateBarcode.create(Symbology.fromValue(args[2]), args[1], ItemListActivity.density, Rotation.Normal, args.length > 3 ? Boolean.valueOf(args[3]) : true);
                 case "lookup":
                     return UPCLookup.lookup(args[1]);
                 case "deviceSearch":

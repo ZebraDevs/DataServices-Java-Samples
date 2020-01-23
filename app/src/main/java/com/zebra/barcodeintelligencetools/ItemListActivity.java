@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +20,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zebra.barcodeintelligencetools.api.APIContent;
+import com.zebra.barcodeintelligencetools.api.ApiItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +35,7 @@ import java.util.List;
  */
 public class ItemListActivity extends AppCompatActivity {
     public static int density;
-    APIContent content;
+    static APIContent content;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -73,7 +76,14 @@ public class ItemListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
-        content = new APIContent(this);
+        // Add some API items.
+        if (content == null)
+            content = new APIContent();
+        else
+            content.clear();
+        content.addItem(getString(R.string.create_barcode), getString(R.string.create_barcode_details), R.drawable.ic_createbarcode);
+        content.addItem(getString(R.string.fda_recall), getString(R.string.fda_recall_details), R.drawable.ic_fdarecall);
+        content.addItem(getString(R.string.upc_lookup), getString(R.string.upc_lookup_details), R.drawable.ic_upclookup);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -136,19 +146,19 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, APIContent.ITEMS, mTwoPane));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, new ArrayList<>(content.values()), mTwoPane));
     }
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final ItemListActivity mParentActivity;
-        private final List<APIContent.ApiItem> mValues;
+        private final List<ApiItem> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                APIContent.ApiItem item = (APIContent.ApiItem) view.getTag();
+                ApiItem item = (ApiItem) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
@@ -168,7 +178,7 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      List<APIContent.ApiItem> items,
+                                      List<ApiItem> items,
                                       boolean twoPane) {
             mValues = items;
             mParentActivity = parent;
@@ -185,7 +195,7 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).id);
+            holder.mIconView.setImageResource(mValues.get(position).icon);
             holder.mContentView.setText(mValues.get(position).content);
 
             holder.itemView.setTag(mValues.get(position));
@@ -198,13 +208,13 @@ public class ItemListActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView mIdView;
             final TextView mContentView;
+            final ImageView mIconView;
 
             ViewHolder(View view) {
                 super(view);
-                mIdView = view.findViewById(R.id.id_text);
                 mContentView = view.findViewById(R.id.content);
+                mIconView = view.findViewById(R.id.icon);
             }
         }
     }

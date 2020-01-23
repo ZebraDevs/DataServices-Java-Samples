@@ -12,15 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.zebra.barcodeintelligencetools.api.APIContent;
+import com.zebra.barcodeintelligencetools.api.ApiItem;
 import com.zebra.barcodeintelligencetools.api.RetrieveAPITask;
 import com.zebra.savanna.SavannaAPI;
 import com.zebra.savanna.Symbology;
@@ -43,7 +45,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
     /**
      * The item content this fragment is presenting.
      */
-    private static APIContent.ApiItem mItem;
+    private static ApiItem mItem;
     private static String details = "";
     private static Bitmap barcodeImage;
 
@@ -129,19 +131,19 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
             // Load the item content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = APIContent.ITEM_MAP.get(key);
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = activity == null ? null : (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
-            }
+            mItem = ItemListActivity.content.get(key);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Activity activity = this.getActivity();
+        CollapsingToolbarLayout appBarLayout = activity == null ? null : (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+        if (appBarLayout != null) {
+            appBarLayout.setTitle(mItem.content);
+        }
+
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.item_detail, container, false);
 
         SharedPreferences sharedPreferences =
@@ -213,7 +215,8 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
             case "1":
                 EditText barcodeText = root.findViewById(R.id.barcodeText);
                 Spinner barcodeType = root.findViewById(R.id.barcodeTypes);
-                new RetrieveAPITask().execute("create", barcodeText.getText().toString(), barcodeType.getSelectedItem().toString());
+                CheckBox includeText = root.findViewById(R.id.includeText);
+                new RetrieveAPITask().execute("create", barcodeText.getText().toString(), barcodeType.getSelectedItem().toString(), Boolean.toString(includeText.isChecked()));
                 return;
             case "2":
                 EditText searchText = root.findViewById(R.id.fdaSearchTerm);

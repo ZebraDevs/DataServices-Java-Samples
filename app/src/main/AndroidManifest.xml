@@ -25,7 +25,6 @@
         </activity>
         <activity
             android:name=".ItemDetailActivity"
-            android:label="@string/title_item_detail"
             android:parentActivityName=".ItemListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
