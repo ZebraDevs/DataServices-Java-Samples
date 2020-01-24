@@ -60,28 +60,30 @@ public class ItemDetailActivity extends AppCompatActivity {
         CollapsingToolbarLayout toolbarLayout = findViewById(R.id.toolbar_layout);
         String itemId = getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID);
         int color;
-        switch (itemId){
-            case "1":
-                getWindow().setStatusBarColor(getResources().getColor(R.color.colorCreateBarcodeDark));
-                color = getResources().getColor(R.color.colorCreateBarcode);
-                toolbar.setBackgroundColor(color);
-                toolbarLayout.setContentScrimColor(color);
-                toolbarLayout.setBackgroundColor(color);
-                break;
-            case "2":
-                getWindow().setStatusBarColor(getResources().getColor(R.color.colorFdaRecallDark));
-                color = getResources().getColor(R.color.colorFdaRecall);
-                toolbar.setBackgroundColor(color);
-                toolbarLayout.setContentScrimColor(color);
-                toolbarLayout.setBackgroundColor(color);
-                break;
-            case "3":
-                getWindow().setStatusBarColor(getResources().getColor(R.color.colorUpcLookupDark));
-                color = getResources().getColor(R.color.colorUpcLookup);
-                toolbar.setBackgroundColor(color);
-                toolbarLayout.setContentScrimColor(color);
-                toolbarLayout.setBackgroundColor(color);
-                break;
+        if (itemId != null) {
+            switch (itemId) {
+                case "1":
+                    getWindow().setStatusBarColor(getResources().getColor(R.color.colorCreateBarcodeDark));
+                    color = getResources().getColor(R.color.colorCreateBarcode);
+                    toolbar.setBackgroundColor(color);
+                    toolbarLayout.setContentScrimColor(color);
+                    toolbarLayout.setBackgroundColor(color);
+                    break;
+                case "2":
+                    getWindow().setStatusBarColor(getResources().getColor(R.color.colorFdaRecallDark));
+                    color = getResources().getColor(R.color.colorFdaRecall);
+                    toolbar.setBackgroundColor(color);
+                    toolbarLayout.setContentScrimColor(color);
+                    toolbarLayout.setBackgroundColor(color);
+                    break;
+                case "3":
+                    getWindow().setStatusBarColor(getResources().getColor(R.color.colorUpcLookupDark));
+                    color = getResources().getColor(R.color.colorUpcLookup);
+                    toolbar.setBackgroundColor(color);
+                    toolbarLayout.setContentScrimColor(color);
+                    toolbarLayout.setBackgroundColor(color);
+                    break;
+            }
         }
         setSupportActionBar(toolbar);
 
@@ -130,7 +132,10 @@ public class ItemDetailActivity extends AppCompatActivity {
     //
     private void displayScanResult(Intent initiatingIntent) {
         String decodedData = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_data));
-        String decodedLabelType = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_label_type)).toLowerCase();
+        String decodedLabelType = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_label_type));
+        if (decodedLabelType != null) {
+            decodedLabelType = decodedLabelType.toLowerCase();
+        }
 
         System.out.println("decodedData: " + decodedData);
         System.out.println("decodedLabelType: " + decodedLabelType);

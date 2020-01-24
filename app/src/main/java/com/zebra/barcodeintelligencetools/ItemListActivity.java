@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -130,7 +129,10 @@ public class ItemListActivity extends AppCompatActivity {
     private void displayScanResult(Intent initiatingIntent) {
         if (!mTwoPane) return;
         String decodedData = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_data));
-        String decodedLabelType = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_label_type)).toLowerCase();
+        String decodedLabelType = initiatingIntent.getStringExtra(getResources().getString(R.string.datawedge_intent_key_label_type));
+        if (decodedLabelType != null) {
+            decodedLabelType = decodedLabelType.toLowerCase();
+        }
 
         System.out.println("decodedData: " + decodedData);
         System.out.println("decodedLabelType: " + decodedLabelType);
@@ -195,8 +197,8 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIconView.setImageResource(mValues.get(position).icon);
             holder.mContentView.setText(mValues.get(position).content);
+            holder.mContentView.setCompoundDrawables(mParentActivity.getDrawable(mValues.get(position).icon), null, null, null);
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -209,12 +211,10 @@ public class ItemListActivity extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView mContentView;
-            final ImageView mIconView;
 
             ViewHolder(View view) {
                 super(view);
                 mContentView = view.findViewById(R.id.content);
-                mIconView = view.findViewById(R.id.icon);
             }
         }
     }
