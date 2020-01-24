@@ -197,9 +197,10 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mContentView.setText(mValues.get(position).content);
-            holder.mContentView.setCompoundDrawables(mParentActivity.getDrawable(mValues.get(position).icon), null, null, null);
-
+            ApiItem item = mValues.get(position);
+            holder.mContentView.setText(item.content);
+            holder.mContentView.setCompoundDrawablesWithIntrinsicBounds(mParentActivity.getDrawable(item.icon), null, null, null);
+            holder.mContentView.setCompoundDrawablePadding(16);
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
         }
