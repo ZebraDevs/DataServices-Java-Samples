@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <EditText
+        android:inputType="text"
         android:id="@+id/fdaSearchTerm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:enabled="false"
         android:padding="18dp"
         android:text="@string/fdaSearch" />
 

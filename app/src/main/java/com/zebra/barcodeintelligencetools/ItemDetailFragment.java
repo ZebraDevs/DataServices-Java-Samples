@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -211,10 +213,29 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                     break;
                 case "2":
                     View recallView = inflater.inflate(R.layout.fda_recall, container, false);
-                    Button recalls = recallView.findViewById(R.id.fdaSearch);
+                    final Button recalls = recallView.findViewById(R.id.fdaSearch);
                     recalls.setOnClickListener(this);
                     TextView recallResults = recallView.findViewById(R.id.resultData);
                     recallResults.setText(details);
+                    EditText searchText = recallView.findViewById(R.id.fdaSearchTerm);
+                    searchText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (s.toString().trim().length() == 0) {
+                                recalls.setEnabled(false);
+                            } else {
+                                recalls.setEnabled(true);
+                            }
+                        }
+
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
                     root.addView(recallView);
                     break;
                 case "3":
@@ -222,8 +243,28 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                     TextView results = lookupView.findViewById(R.id.resultData);
                     results.setText(details);
 
-                    Button lookup = lookupView.findViewById(R.id.upc_lookup);
+                    final Button lookup = lookupView.findViewById(R.id.upc_lookup);
                     lookup.setOnClickListener(this);
+
+                    EditText lookupText = lookupView.findViewById(R.id.upc);
+                    lookupText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (s.toString().trim().length() == 0) {
+                                lookup.setEnabled(false);
+                            } else {
+                                lookup.setEnabled(true);
+                            }
+                        }
+
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
 
                     root.addView(lookupView);
                     break;

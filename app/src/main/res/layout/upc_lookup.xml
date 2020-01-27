@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:inputType="number"
         android:hint="@string/scan" />
 
     <Button
@@ -17,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:enabled="false"
         android:padding="18dp"
         android:text="@string/lookup_upc" />
 
