@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -187,7 +188,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
 
             switch (mItem.id) {
                 case "1":
-                    View createView = inflater.inflate(R.layout.create_barcode, container, false);
+                    final View createView = inflater.inflate(R.layout.create_barcode, container, false);
 
                     TextView createResults = createView.findViewById(R.id.resultData);
                     createResults.setText(details);
@@ -196,9 +197,25 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                     create.setOnClickListener(this);
 
                     Spinner types = createView.findViewById(R.id.barcodeTypes);
+                    types.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            EditText barcodeText = createView.findViewById(R.id.barcodeText);
+                            barcodeText.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
                     Context context = getContext();
-                    if (context != null)
-                        types.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, Symbology.values()));
+                    if (context != null) {
+                        Symbology[] symbologies = Symbology.values();
+                        Object[] values = new Object[symbologies.length + 1];
+                        values[0] = getResources().getString(R.string.barcode_type);
+                        System.arraycopy(symbologies, 0, values, 1, symbologies.length);
+                        types.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, values));
+                    }
 
                     ImageView barcode = createView.findViewById(R.id.barcode);
                     if (barcodeImage == null && details.equals("")) {

@@ -24,8 +24,7 @@
         android:name="com.zebra.barcodeintelligencetools.ItemListFragment"
         android:layout_width="@dimen/item_width"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:background="#F5F5F5"
+        android:layout_marginVertical="20dp"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.zebra.barcodeintelligencetools.ItemListActivity"
         tools:listitem="@layout/item_list_content" />
