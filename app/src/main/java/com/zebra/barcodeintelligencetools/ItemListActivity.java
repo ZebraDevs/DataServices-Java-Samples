@@ -200,7 +200,7 @@ public class ItemListActivity extends AppCompatActivity {
             ApiItem item = mValues.get(position);
             holder.mContentView.setText(item.content);
             holder.mContentView.setCompoundDrawablesWithIntrinsicBounds(mParentActivity.getDrawable(item.icon), null, null, null);
-            holder.mContentView.setCompoundDrawablePadding(16);
+            holder.mContentView.setCompoundDrawablePadding(32);
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
         }

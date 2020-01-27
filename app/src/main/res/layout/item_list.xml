@@ -6,8 +6,8 @@
     android:name="com.zebra.barcodeintelligencetools.ItemListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginTop="20dp"
+    android:background="#F5F5F5"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ItemListActivity"
     tools:listitem="@layout/item_list_content" />
