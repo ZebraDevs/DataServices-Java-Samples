@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -132,6 +133,35 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             mItem = ItemListActivity.content.get(key);
+        }
+
+        Activity activity = getActivity();
+        if (activity == null) return;
+        Toolbar toolbar = activity.findViewById(R.id.detail_toolbar);
+        CollapsingToolbarLayout toolbarLayout = activity.findViewById(R.id.toolbar_layout);
+        int color;
+        switch (mItem.id) {
+            case "1":
+                activity.getWindow().setStatusBarColor(getResources().getColor(R.color.colorCreateBarcodeDark));
+                color = getResources().getColor(R.color.colorCreateBarcode);
+                toolbar.setBackgroundColor(color);
+                toolbarLayout.setContentScrimColor(color);
+                toolbarLayout.setBackgroundColor(color);
+                break;
+            case "2":
+                activity.getWindow().setStatusBarColor(getResources().getColor(R.color.colorFdaRecallDark));
+                color = getResources().getColor(R.color.colorFdaRecall);
+                toolbar.setBackgroundColor(color);
+                toolbarLayout.setContentScrimColor(color);
+                toolbarLayout.setBackgroundColor(color);
+                break;
+            case "3":
+                activity.getWindow().setStatusBarColor(getResources().getColor(R.color.colorUpcLookupDark));
+                color = getResources().getColor(R.color.colorUpcLookup);
+                toolbar.setBackgroundColor(color);
+                toolbarLayout.setContentScrimColor(color);
+                toolbarLayout.setBackgroundColor(color);
+                break;
         }
     }
 
