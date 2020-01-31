@@ -33,7 +33,6 @@ import java.util.List;
  * item details side-by-side using two vertical panes.
  */
 public class ItemListActivity extends AppCompatActivity {
-    public static int density;
     static APIContent content;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -103,7 +102,6 @@ public class ItemListActivity extends AppCompatActivity {
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         filter.addAction(getResources().getString(R.string.activity_intent_filter_action));
         registerReceiver(myBroadcastReceiver, filter);
-        density = (int) Math.ceil(getResources().getDisplayMetrics().density);
     }
 
     @Override
@@ -163,7 +161,7 @@ public class ItemListActivity extends AppCompatActivity {
                 ApiItem item = (ApiItem) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(ItemDetailFragment.ArgItemId, item.id);
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -172,7 +170,7 @@ public class ItemListActivity extends AppCompatActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    intent.putExtra(ItemDetailFragment.ArgItemId, item.id);
 
                     context.startActivity(intent);
                 }

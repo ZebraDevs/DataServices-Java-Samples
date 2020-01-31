@@ -55,7 +55,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
         Toolbar toolbar = findViewById(R.id.detail_toolbar);
-        String itemId = getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID);
+        String itemId = getIntent().getStringExtra(ItemDetailFragment.ArgItemId);
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
@@ -77,7 +77,7 @@ public class ItemDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
+            arguments.putString(ItemDetailFragment.ArgItemId,
                     itemId);
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
