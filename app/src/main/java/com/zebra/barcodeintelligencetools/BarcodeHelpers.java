@@ -13,16 +13,16 @@ public class BarcodeHelpers {
             ean8 = eanChecksum(ean8);
         }
         if ("012".contains(Character.toString(ean8.charAt(6)))) {
-            return ean8.substring(0, 2) + ean8.charAt(6) + "0000" + ean8.substring(3, 5) + ean8.charAt(7);
+            return ean8.substring(0, 3) + ean8.charAt(6) + "0000" + ean8.substring(3, 6) + ean8.charAt(7);
         }
         if (ean8.charAt(6) == '3') {
-            return ean8.substring(0, 3) + "00000" + ean8.substring(4, 5) + ean8.charAt(7);
+            return ean8.substring(0, 4) + "00000" + ean8.substring(4, 6) + ean8.charAt(7);
         }
         if (ean8.charAt(6) == '4') {
-            return ean8.substring(0, 4) + "00000" + ean8.charAt(5) + ean8.charAt(7);
+            return ean8.substring(0, 5) + "00000" + ean8.charAt(5) + ean8.charAt(7);
         }
         if ("56789".contains(Character.toString(ean8.charAt(6)))) {
-            return ean8.substring(0, 5) + "0000" + ean8.substring(6, 7);
+            return ean8.substring(0, 6) + "0000" + ean8.substring(6);
         }
         throw new Exception("Invalid EAN8 barcode.");
     }
