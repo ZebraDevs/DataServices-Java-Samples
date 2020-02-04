@@ -10,13 +10,7 @@ API Key
 
 To get an API key to work with these samples, use the [Getting Started Guide](https://developer.zebra.com/gsg) and select the Barcode Intelligence product.  
 
-Device Setup
-------------
+Android Device Setup
+--------------------
 
-Create a DataWedge profile:
-
-* Associate the app com.zebra.barcodeintelligencetools
-* Configure scanner settings to decode desired barcode types
-* Enable intent output
-* Set intent action to `com.zebra.SCAN`
-* Change intent delivery to Broadcast intent
+Copy the `dwprofile_Barcode Intelligence Demo.db` DataWedge profile to your device and follow [these instructions](https://techdocs.zebra.com/datawedge/6-5/guide/settings/#importaprofile) to import it.

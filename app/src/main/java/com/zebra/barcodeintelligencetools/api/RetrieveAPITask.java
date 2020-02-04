@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import com.zebra.barcodeintelligencetools.ItemDetailFragment;
 import com.zebra.savanna.CreateBarcode;
 import com.zebra.savanna.FDARecall;
+import com.zebra.savanna.Models.Errors.Error;
 import com.zebra.savanna.Rotation;
 import com.zebra.savanna.Symbology;
 import com.zebra.savanna.UPCLookup;
@@ -20,7 +21,7 @@ public class RetrieveAPITask extends AsyncTask<String, Void, Object> {
         try {
             switch (args[0]) {
                 case "create":
-                    return CreateBarcode.create(Symbology.fromValue(args[2]), args[1], Integer.parseInt(args[3]), Rotation.Normal, args.length > 3 ? Boolean.valueOf(args[4]) : true);
+                    return CreateBarcode.create(Symbology.fromValue(args[2]), args[1], Integer.parseInt(args[3]), Rotation.Normal, args.length > 4 ? Boolean.valueOf(args[4]) : true);
                 case "lookup":
                     return UPCLookup.lookup(args[1]);
                 case "deviceSearch":
@@ -39,18 +40,22 @@ public class RetrieveAPITask extends AsyncTask<String, Void, Object> {
     }
 
     protected void onPostExecute(Object apiData) {
-        try {
-            if (exception != null) {
-                ItemDetailFragment. _showResultsLabel = false;
-                ItemDetailFragment.Instance.onPostExecute(new JSONObject(exception.getMessage()).toString(2));
+        if (exception != null) {
+            ItemDetailFragment._showResultsLabel = false;
+            String message = exception instanceof Error ? ((Error) exception).getMessageFormatted() : exception.getMessage();
+            ItemDetailFragment.Instance.onPostExecute(message);
 
-            } else {
-                ItemDetailFragment. _showResultsLabel = true;
-                ItemDetailFragment.Instance.onPostExecute(apiData);
+        } else {
+            ItemDetailFragment._showResultsLabel = true;
+            if (apiData instanceof String) {
+                try {
+                    apiData = new JSONObject((String) apiData).toString(2);
+                } catch (JSONException e) {
+                    ItemDetailFragment._showResultsLabel = false;
+                    ItemDetailFragment.Instance.onPostExecute("Could not connect to service.");
+                }
             }
-        } catch (JSONException e) {
-            ItemDetailFragment. _showResultsLabel = false;
-            ItemDetailFragment.Instance.onPostExecute("Could not connect to service.");
+            ItemDetailFragment.Instance.onPostExecute(apiData);
         }
     }
 }

@@ -125,15 +125,11 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
         TextView results = root.findViewById(R.id.resultData);
         symbology = symbology.substring("label-type-".length());
         String upcA = null;
-        if (symbology.equals("upce0")) {
+        if (symbology.startsWith("upce")) {
             symbology = "upce";
             try {
-                if (barcode.length() == 6) {
-                    // Add missing checksum data
-                    barcode = BarcodeHelpers.eanChecksum(barcode);
-                }
                 // Calculate UPC-A code for product lookup
-                upcA = BarcodeHelpers.ean8ToUPCA(barcode);
+                upcA = ean8ToUPCA(barcode);
             } catch (Exception e) {
                 Log.i(getClass().getSimpleName(),"Invalid EAN8: " + barcode);
             }
@@ -394,6 +390,22 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 EditText lookupText = root.findViewById(R.id.upc);
                 new RetrieveAPITask().execute("lookup", lookupText.getText().toString());
         }
+    }
+
+    private String ean8ToUPCA(String ean8) throws Exception {
+        if ("012".contains(Character.toString(ean8.charAt(6)))) {
+            return ean8.substring(0, 3) + ean8.charAt(6) + "0000" + ean8.substring(3, 6) + ean8.charAt(7);
+        }
+        if (ean8.charAt(6) == '3') {
+            return ean8.substring(0, 4) + "00000" + ean8.substring(4, 6) + ean8.charAt(7);
+        }
+        if (ean8.charAt(6) == '4') {
+            return ean8.substring(0, 5) + "00000" + ean8.charAt(5) + ean8.charAt(7);
+        }
+        if ("56789".contains(Character.toString(ean8.charAt(6)))) {
+            return ean8.substring(0, 6) + "0000" + ean8.substring(6);
+        }
+        throw new Exception("Invalid EAN8 barcode.");
     }
 
     private void closeKeyboard() {
