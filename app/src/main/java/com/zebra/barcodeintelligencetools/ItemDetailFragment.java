@@ -123,7 +123,14 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
         if (root == null) return;
         closeKeyboard();
         TextView results = root.findViewById(R.id.resultData);
-        symbology = symbology.substring("label-type-".length());
+        final String typePrefix = "label-type-";
+        final String gs1Prefix = "gs1-";
+        if (symbology.startsWith(typePrefix)) {
+            symbology = symbology.substring(typePrefix.length());
+        }
+        if (symbology.startsWith(gs1Prefix) && Symbology.valueOf(symbology) == null) {
+            symbology = symbology.substring(gs1Prefix.length());
+        }
         String upcA = null;
         if (symbology.startsWith("upce")) {
             symbology = "upce";
