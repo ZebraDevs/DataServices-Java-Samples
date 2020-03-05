@@ -128,7 +128,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
         if (symbology.startsWith(typePrefix)) {
             symbology = symbology.substring(typePrefix.length());
         }
-        if (symbology.startsWith(gs1Prefix) && Symbology.valueOf(symbology) == null) {
+        if (symbology.startsWith(gs1Prefix) && Symbology.fromValue(symbology) == null) {
             symbology = symbology.substring(gs1Prefix.length());
         }
         String upcA = null;
